@@ -5,6 +5,7 @@ mod common;
 
 mod regression {
     mod issue_3457;
+    mod windows_leak;
 }
 mod buffer;
 mod buffer_copy;
