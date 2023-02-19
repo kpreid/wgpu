@@ -11,7 +11,7 @@ mod isolation;
 
 const CANVAS_ID: &str = "test-canvas";
 
-async fn initialize_device(
+pub async fn initialize_device(
     adapter: &Adapter,
     features: Features,
     limits: Limits,
@@ -330,7 +330,7 @@ pub fn initialize_test(parameters: TestParameters, test_function: impl FnOnce(Te
     }
 }
 
-fn initialize_adapter() -> (Adapter, SurfaceGuard) {
+pub fn initialize_adapter() -> (Adapter, SurfaceGuard) {
     let backends = wgpu::util::backend_bits_from_env().unwrap_or_else(Backends::all);
     let dx12_shader_compiler = wgpu::util::dx12_shader_compiler_from_env().unwrap_or_default();
     let instance = Instance::new(wgpu::InstanceDescriptor {
@@ -376,7 +376,7 @@ fn initialize_adapter() -> (Adapter, SurfaceGuard) {
     (adapter, surface_guard)
 }
 
-struct SurfaceGuard {
+pub struct SurfaceGuard {
     #[cfg(all(
         target_arch = "wasm32",
         any(target_os = "emscripten", feature = "webgl")
