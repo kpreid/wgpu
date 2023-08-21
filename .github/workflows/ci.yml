@@ -188,7 +188,12 @@ jobs:
         with:
           tool: wasm-pack
 
-      - name: execute tests
+      - name: execute tests on WebGPU backend
+        run: |
+          cd wgpu
+          wasm-pack test --headless --chrome --workspace
+
+      - name: execute tests on WebGL backend
         run: |
           cd wgpu
           wasm-pack test --headless --chrome --features webgl --workspace
