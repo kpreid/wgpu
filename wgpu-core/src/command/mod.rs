@@ -327,19 +327,13 @@ impl<A: HalApi> CommandBuffer<A> {
         encoder: A::CommandEncoder,
         device: &Arc<Device<A>>,
         #[cfg(feature = "trace")] enable_tracing: bool,
-        label: Option<String>,
+        label: Option<&str>,
     ) -> Self {
         CommandBuffer {
             device: device.clone(),
             limits: device.limits.clone(),
             support_clear_texture: device.features.contains(wgt::Features::CLEAR_TEXTURE),
-            info: ResourceInfo::new(
-                label
-                    .as_ref()
-                    .unwrap_or(&String::from("<CommandBuffer>"))
-                    .as_str(),
-                None,
-            ),
+            info: ResourceInfo::new(label.unwrap_or("<CommandBuffer>"), None),
             data: Mutex::new(
                 rank::COMMAND_BUFFER_DATA,
                 Some(CommandBufferMutable {
@@ -347,7 +341,7 @@ impl<A: HalApi> CommandBuffer<A> {
                         raw: encoder,
                         is_open: false,
                         list: Vec::new(),
-                        label,
+                        label: label.map(str::to_owned),
                     },
                     status: CommandEncoderStatus::Recording,
                     trackers: Tracker::new(),
